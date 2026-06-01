@@ -10,17 +10,14 @@ class WindowSchool(QWidget):
     def __init__(self):
         super().__init__()
         
-        # 1. Configuração da Janela
         self.setWindowTitle("Bases converter")
         self.resize(350, 250)
         
-        # 2. Criando as entradas de texto
         self.dec_imput = QLineEdit()
         self.bin_imput = QLineEdit()
         self.oct_imput = QLineEdit()
         self.hex_imput = QLineEdit()
 
-        # 3. Organizando com o QFormLayout
         layout = QFormLayout()
         layout.addRow("Type a number in decimal below:", self.dec_imput)
         layout.addRow("Type a number in binary below:", self.bin_imput)
@@ -30,7 +27,6 @@ class WindowSchool(QWidget):
         layout.setRowWrapPolicy(QFormLayout.WrapAllRows)
         self.setLayout(layout)
 
-        # Sempre que o texto do Decimal mudar, o loop avisa e roda a função abaixo.
         self.dec_imput.textChanged.connect(self.convert_of_dec)
         self.bin_imput.textChanged.connect(self.convert_of_bin)
         self.oct_imput.textChanged.connect(self.convert_of_oct)
@@ -39,7 +35,6 @@ class WindowSchool(QWidget):
     def convert_of_dec(self):
         text_dec = self.dec_imput.text()
         
-        # Se o usuário apagar o decimal, limpa TODOS os campos automáticos
         if not text_dec:
             self.bin_imput.setText("")
             self.oct_imput.setText("")
@@ -47,10 +42,8 @@ class WindowSchool(QWidget):
             return
 
         try:
-            # Pegamos APENAS o número decimal, que é o que precisamos para calcular o resto
             number_dec = int(text_dec)
-            
-            # --- 1. CÁLCULO DO BINÁRIO ---
+
             value_list_bin = Computational_bases.dec_to_bin(number_dec)
             value_bin_joing = "".join(str(x) for x in value_list_bin)
             
@@ -58,21 +51,17 @@ class WindowSchool(QWidget):
             self.bin_imput.setText(value_bin_joing)
             self.bin_imput.blockSignals(False)      
 
-            # --- 2. CÁLCULO DO OCTAL ---
             value_list_oct = Computational_bases.dec_to_oct(number_dec)
             value_oct_joing = "".join(str(x) for x in value_list_oct)
             
             self.oct_imput.blockSignals(True)
             self.oct_imput.setText(value_oct_joing)
             self.oct_imput.blockSignals(False)
-            
-            # --- 3. CÁLCULO DO HEXADECIMAL ---
+
             value_list_hex = Computational_bases.dec_to_hex(number_dec)
-            
-            # Uma lista simples para mapear os restos maiores que 9 para letras (A-F)
+   
             hex_table = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"]
-            
-            # Mapeia cada resto retornado pelo C++ direto na tabela hexadecimal
+
             value_hex_joing = "".join(hex_table[int(x)] for x in value_list_hex)
             
             self.hex_imput.blockSignals(True)
@@ -199,7 +188,6 @@ class WindowSchool(QWidget):
 
 
 
-# Inicialização padrão do sistema de janelas
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     janela = WindowSchool()
